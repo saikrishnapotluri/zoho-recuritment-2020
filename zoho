@@ -1,0 +1,66 @@
+function treeUpDown(data, id) {
+    if (data == null) {
+        return false;
+    }
+
+    if (data.id == id) {
+        let x = {};
+        x.name = data.name;
+        x.id = data.id;
+        arr.push(x);
+        return true;
+    }
+    else if (data.mate) {
+        for (let mate of data.mate) {
+            if (mate.id == id) {
+                let x = {};
+                x.name = data.name;
+                x.id = data.id;
+                x.mate = [];
+                x.mate.push(mate);
+                arr.push(x);
+                return true;
+            }
+        }
+    }
+
+    if (data.children) {
+        for (let i = 0; i < data.children.length; i++) {
+            let y = treeUpDown(data.children[i], id);
+            if (y) {
+                let z = {};
+                let mem = data;
+                z.name = mem.name;
+                z.id = mem.id;
+                arr.push(z);
+                return true;
+            }
+        }
+    }
+}
+
+var getRelationTree = function (tree, p1, p2) {
+    arr = [];
+    treeUpDown(tree, p1);
+    let newArr = [];
+    newArr = arr;
+    arr = [];
+    treeUpDown(tree, p2);
+    let newArr2 = [];
+    newArr2 = arr;
+
+    let l1 = newArr.length - 1;
+    let l2 = newArr2.length - 1;
+
+    while (newArr.length > 1 && newArr2.length > 1) {
+        if (newArr[l1 - 1].id == newArr2[l2 - 1].id) {
+            newArr.pop();
+            newArr2.pop();
+            l1--;
+            l2--;
+        }
+        else {
+            break;
+        }
+    }
+}
